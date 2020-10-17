@@ -1,0 +1,66 @@
+{% extends 'org-detail-base.html' %}
+{% block title %}
+    机构课程列表页
+{% endblock %}
+{% block headjs %}
+    <link rel="stylesheet" type="text/css" href="/static/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/animate.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/static/js/plugins/queryCity/css/cityLayout.css">
+
+    <script src="/static/js/jquery.min.js" type="text/javascript"></script>
+    <script src="/static/js/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+{% endblock %}
+{% block right %}
+    <div class="right companycenter layout">
+        <div class="head">
+            <h1>机构课程</h1>
+        </div>
+        <div class="brief group_list">
+            {% for course in course_page.object_list %}
+                <div class="module1_5 box">
+                    <a class="comp-img-box" href="{% url 'course:course_detail' course.id %}">
+
+                        <img width="214" height="195" src="/static/{{ course.image }}"/>
+                    </a>
+                    <div class="des">
+                        <a href="course-detail.html"><h2>{{ course.name }}</h2></a>
+                        <span class="fl">课时：<i class="key">{{ course.study_time }}</i></span>
+                        <span class="fr">学习人数：{{ course.study_num }}</span>
+                    </div>
+                    <div class="bottom">
+                        <span class="fl">{{ org.name }}</span>
+                        <span class="star fr  notlogin
+                            " data-favid="13" data-fav-type="4">
+                            {{ course.love_num }}
+                        </span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="pageturn">
+            <ul class="pagelist">
+                {% for page_um in paginator.page_range %}
+                    <li {% if page_um == num %}class="active"{% endif %}><a href="?page={{ page_um }}">{{ page_um }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+
+    </section>
+    <!--sidebar start-->
+    <section>
+        <ul class="sidebar">
+            <li class="qq">
+                <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2023525077&site=qq&menu=yes"></a>
+            </li>
+            <li class="totop"></li>
+        </ul>
+    </section>
+    <!--sidebar end-->
+    <!--header start-->
+    </div>
+{% endblock %}
+
+

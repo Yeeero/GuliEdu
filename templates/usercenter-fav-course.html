@@ -1,0 +1,203 @@
+{% extends 'usercenter-base.html' %}
+{% block title %}
+我的收藏- 谷粒教育网
+{% endblock %}
+{% block crumbs_last %}
+我的收藏
+{% endblock %}
+{% block right %}
+<div class="right" >
+            <div class="personal_des Releasecont">
+                <div class="head">
+                    <h1>我的收藏</h1>
+                </div>
+            </div>
+            <div class="personal_des permessage">
+                <div class="head">
+                    <ul class="tab_header messagehead">
+                        <li onclick="orgBtn(this)">课程机构</li>
+                        <li onclick="teacherBtn(this)"><a href="#">授课教师 </a></li>
+                        <li class="active" onclick="courseBtn(this)"><a href="#">公开课程</a></li>
+                    </ul>
+
+                </div>
+                <!-- 我的收藏课程 -->
+                <div class="companycenter" id="courselist">
+                    <div class="group_list brief">
+
+                        {% for course in course_list %}
+                            <div class="module1_5 box">
+                                <a href="{% url 'course:course_detail' course.id %}">
+                                    <img width="214" height="190" src="/static/{{ course.image }}"/>
+                                </a>
+                                <div class="des">
+                                    <a href="course-detail.html"><h2>{{ course.name }}</h2></a>
+                                    <span class="fl">时长：<i class="key">{{ course.study_time }}</i></span>
+                                    <span class="fr">学习人数：{{ course.study_num }}</span>
+                                </div>
+                                <div class="bottom">
+                                    <span class="fl">{{ course.orginfo.name }}</span>
+                                    <span class="delete-group fr jsDeleteFav_course" data-favid="{{ course.id }}"></span>
+                                </div>
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+                </div>
+                <!-- 我的收藏老师 -->
+                <div class="messagelist" hidden id="teacherlist">
+
+                    {% for teacher in teacher_list %}
+                        <div class=" butler_list butler-fav-box">
+                            <dl class="des users">
+                                <dt>
+                                    <a href="{% url 'orgs:teacher_detail' teacher.id %}">
+                                        <img width="100" height="100" src="/static/{{ teacher.image }}"/>
+                                    </a>
+                                </dt>
+                                <dd>
+                                    <h1>
+                                        <a href="{% url 'orgs:teacher_detail' teacher.id %}">
+                                            {{ teacher.name }}<span class="key">认证教师</span>
+                                        </a>
+                                    </h1>
+                                    <ul class="cont clearfix">
+                                        <li class="time">工作年限：<span>{{ teacher.work_year }}年</span></li>
+                                        <li class="c7">课程数：<span>{{ teacher.courseinfo_set.count }}</span></li>
+                                    </ul>
+                                    <ul class="cont clearfix">
+                                        <li class="time">工作公司：<span>{{ teacher.work_company.name }}</span></li>
+                                        <li class="c7">公司职位：<span>{{ teacher.work_position }}</span></li>
+                                    </ul>
+                                </dd>
+                                <div class="delete jsDeleteFav_teacher" data-favid="{{ teacher.id }}"></div>
+                            </dl>
+                        </div>
+
+                    {% endfor %}
+
+
+                </div>
+                <!-- 我的收藏机构 -->
+                <div class="messagelist" id="orglist" hidden>
+
+                    {% for org in org_list %}
+                        <div class="messages butler_list company company-fav-box">
+                            <dl class="des fr">
+                                <dt>
+                                    <a href="{% url 'orgs:org_detail' org.id %}">
+                                        <img width="160" height="90" src="/static/{{ org.image }}"/>
+                                    </a>
+                                </dt>
+                                <dd>
+                                    <h1><a href="{% url 'orgs:org_detail' org.id %}">{{ org.name }}</a></h1>
+                                    <div class="pic fl" style="width:auto;">
+
+                                        <img src="/static/images/authentication.png"/>
+
+
+                                        <img src="/static/images/gold.png"/>
+
+                                    </div>
+                                    <span class="c8 clear">{{ org.cityyinfo.name }}</span>
+                                    <div class="delete jsDeleteFav_org" data-favid="{{ org.id }}"></div>
+                                </dd>
+                            </dl>
+                        </div>
+
+                    {% endfor %}
+
+
+                </div>
+            </div>
+        </div>
+
+
+	</div>
+{% endblock %}
+{% block myfootjs %}
+    <script>
+        function orgBtn(ele){
+            $(ele).addClass('active')
+            $(ele).siblings().removeClass('active')
+            $("#courselist").hide()
+            $('#orglist').show()
+            $('#teacherlist').hide()
+        }
+
+        function teacherBtn(ele){
+            $(ele).addClass('active')
+            $(ele).siblings().removeClass('active')
+            $("#courselist").hide()
+            $('#orglist').hide()
+            $('#teacherlist').show()
+        }
+
+        function courseBtn(ele){
+            $(ele).addClass('active')
+            $(ele).siblings().removeClass('active')
+            $("#courselist").show()
+            $('#orglist').hide()
+            $('#teacherlist').hide()
+        }
+
+        $('.jsDeleteFav_course').on('click', function(){
+        var _this = $(this),
+            favid = _this.attr('data-favid');
+        $.ajax({
+                cache: false,
+                type: "GET",
+                url: "{% url 'orgs:add_fav' %}",
+                data: {
+                    lovetype: 2,
+                    love_id: favid,
+                },
+                async: true,
+                success: function(data) {
+                    $(_this).parent().parent().remove();
+                }
+            });
+    });
+
+        $('.jsDeleteFav_org').on('click', function(){
+            var _this = $(this),
+                favid = _this.attr('data-favid');
+            $.ajax({
+                    cache: false,
+                    type: "GET",
+                    url: "{% url 'orgs:add_fav' %}",
+                    data: {
+                        lovetype: 1,
+                        love_id: favid,
+                        csrfmiddlewaretoken: '799Y6iPeEDNSGvrTu3noBrO4MBLv6enY'
+                    },
+                    async: true,
+                    success: function(data) {
+                        $(_this).parent().parent().remove();
+                    }
+                });
+        });
+
+        $('.jsDeleteFav_teacher').on('click', function(){
+            var _this = $(this),
+                favid = _this.attr('data-favid');
+            $.ajax({
+                    cache: false,
+                    type: "GET",
+                    url: "{% url 'orgs:add_fav' %}",
+                    data: {
+                        lovetype: 3,
+                        love_id: favid,
+                    },
+                    async: true,
+                    success: function(data) {
+                        {#alert(data.msg)#}
+                        $(_this).parent().parent().remove();
+                    }
+                });
+        });
+    </script>
+{% endblock %}
+
+

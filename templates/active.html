@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>邮箱激活</title>
+</head>
+<body>
+{% if send_type == 2 %}
+    <span> 请<a href="{{ url }}">点击</a>修改密码</span>
+{% else %}
+    <span> 请<a href="{{ url }}">点击</a>邮寄激活</span>
+{% endif %}
+
+</body>
+</html>

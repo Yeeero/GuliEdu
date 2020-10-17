@@ -1,0 +1,22 @@
+{% extends 'base1.html' %}
+{% block headjs %}
+    <link rel="stylesheet" type="text/css" href="/static/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/login.css">
+{% endblock %}
+{% block header %}
+<header>
+    <div class="c-box fff-box">
+        <div class="wp header-box">
+            <p class="fl hd-tips">谷粒教育在线网，在线学习平台！</p>
+            <ul class="fr hd-bar">
+                <li>服务电话：<span>88888888</span></li>
+                <li class="active"><a href="{% url 'users:login' %}">[登录]</a></li>
+                <li><a href="{% url 'users:register' %}">[注册]</a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+{% endblock %}
+{% block middle %}
+
+{% endblock %}
